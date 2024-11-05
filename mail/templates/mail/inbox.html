@@ -1,0 +1,107 @@
+{% extends "mail/layout.html" %}
+{% load static %}
+
+{% block styles %}
+<style type="text/css">
+    .email-item {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .unread-email {
+        background-color: white;
+    }
+
+    .read-email {
+        background-color: #e9ecef;
+    }
+
+    .email-item:hover {
+        background-color: #f1f1f1;
+        transform: scale(1.02);
+    }
+
+    .email-item strong {
+        font-weight: bold;
+    }
+
+    .email-item span {
+        float: right;
+        color: #6c757d;
+    }
+
+    textarea {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    #emails-view div {
+        margin-bottom: 20px;
+    }
+
+    #emails-view button {
+        margin-top: 10px;
+    }
+
+    button, a.btn {
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    button:hover, a.btn:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+    /* Additional styling for the email-detail-view */
+    #email-detail-view h3 {
+        margin-top: 0;
+    }
+
+    #email-detail-view p {
+        margin: 5px 0;
+        white-space: pre-wrap;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<h2>{{ request.user.email }}</h2>
+
+<button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
+<button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
+<button class="btn btn-sm btn-outline-primary" id="sent">Sent</button>
+<button class="btn btn-sm btn-outline-primary" id="archived">Archived</button>
+<a class="btn btn-sm btn-outline-primary" href="{% url 'logout' %}">Log Out</a>
+<hr>
+
+<div id="emails-view"></div>
+
+<div id="compose-view" style="display: none;">
+    <h3>New Email</h3>
+    <form id="compose-form">
+        <div class="form-group">
+            From: <input disabled class="form-control" value="{{ request.user.email }}">
+        </div>
+        <div class="form-group">
+            To: <input id="compose-recipients" class="form-control">
+        </div>
+        <div class="form-group">
+            <input class="form-control" id="compose-subject" placeholder="Subject">
+        </div>
+        <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
+        <input type="submit" class="btn btn-primary" value="Send">
+    </form>
+</div>
+
+<div id="email-detail-view" style="display: none;"></div>
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'mail/inbox.js' %}"></script>
+{% endblock %}
